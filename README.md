@@ -2,4 +2,4 @@ PoinMap – приложение для сохранения пользоват�
 Стек:
 - Kotlin
 - Jetpack Compose
-- Composre Navigation
+- Compose Navigation
