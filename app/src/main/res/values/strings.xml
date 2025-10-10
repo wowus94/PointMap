@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PointMap</string>
+    <string name="add_point">Добавить точку</string>
 </resources>

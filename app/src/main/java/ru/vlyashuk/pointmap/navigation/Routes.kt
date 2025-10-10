@@ -15,7 +15,7 @@ class Routes {
     object Profile : NavDestination("profile")
 
     @Serializable
-    object AddNote : NavDestination("add_note")
+    object AddPoint : NavDestination("add_point")
 
     @Serializable
     data class EditNote(val id: Long)

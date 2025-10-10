@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 
 @Composable
-fun CatalogScreen() {
+fun CatalogScreen(
+    modifier: Modifier = Modifier
+) {
     Text("Map Screen", modifier = Modifier.fillMaxSize(), textAlign = TextAlign.Center)
 }

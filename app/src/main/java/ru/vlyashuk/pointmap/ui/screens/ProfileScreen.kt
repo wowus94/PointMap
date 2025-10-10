@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    modifier: Modifier = Modifier
+) {
     Text("Profile Screen", modifier = Modifier.fillMaxSize(), textAlign = TextAlign.Center)
 }
