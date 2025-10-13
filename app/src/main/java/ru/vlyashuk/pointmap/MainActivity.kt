@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.vlyashuk.pointmap.navigation.BottomNavScreen
 import ru.vlyashuk.pointmap.navigation.Routes
 import ru.vlyashuk.pointmap.ui.screens.AddPointScreen
@@ -30,6 +31,7 @@ import ru.vlyashuk.pointmap.ui.screens.MainScreen
 import ru.vlyashuk.pointmap.ui.screens.ProfileScreen
 import ru.vlyashuk.pointmap.ui.theme.PointMapTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +83,7 @@ class MainActivity : ComponentActivity() {
                             ProfileScreen(Modifier.padding(innerPadding))
                         }
                         composable(Routes.AddPoint.route ?: "add_point") {
-                            AddPointScreen()
+                            AddPointScreen(navController)
                         }
                     }
                 }
