@@ -10,18 +10,25 @@ import kotlinx.coroutines.launch
 import ru.vlyashuk.pointmap.domain.model.Point
 import ru.vlyashuk.pointmap.domain.usecase.AddPointUseCase
 import ru.vlyashuk.pointmap.domain.usecase.DeletePointUseCase
+import ru.vlyashuk.pointmap.domain.usecase.GetPointByIdUseCase
 import ru.vlyashuk.pointmap.domain.usecase.GetPointsUseCase
+import ru.vlyashuk.pointmap.domain.usecase.UpdatePointUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class PointViewModel @Inject constructor(
     private val getPointsUseCase: GetPointsUseCase,
     private val addPointUseCase: AddPointUseCase,
-    private val deletePointUseCase: DeletePointUseCase
+    private val deletePointUseCase: DeletePointUseCase,
+    private val updatePointUseCase: UpdatePointUseCase,
+    private val getPointByIdUseCase: GetPointByIdUseCase
 ) : ViewModel() {
 
     private val _points = MutableStateFlow<List<Point>>(emptyList())
     val points: StateFlow<List<Point>> = _points
+
+    private val _selectedPoint = MutableStateFlow<Point?>(null)
+    val selectedPoint: StateFlow<Point?> = _selectedPoint
 
     init {
         loadPoints()
@@ -39,6 +46,19 @@ class PointViewModel @Inject constructor(
         viewModelScope.launch {
             val point = Point(title = title, coordinates = coordinates, description = description)
             addPointUseCase(point)
+        }
+    }
+
+    fun loadPointById(id: Long) {
+        viewModelScope.launch {
+            val point = getPointByIdUseCase(id)
+            _selectedPoint.value = point
+        }
+    }
+
+    fun updatePoint(point: Point) {
+        viewModelScope.launch {
+            updatePointUseCase(point)
         }
     }
 

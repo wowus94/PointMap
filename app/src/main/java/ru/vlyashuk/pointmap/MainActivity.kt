@@ -17,11 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import ru.vlyashuk.pointmap.navigation.BottomNavScreen
 import ru.vlyashuk.pointmap.navigation.Routes
@@ -29,6 +32,7 @@ import ru.vlyashuk.pointmap.ui.screens.AddPointScreen
 import ru.vlyashuk.pointmap.ui.screens.CatalogScreen
 import ru.vlyashuk.pointmap.ui.screens.MainScreen
 import ru.vlyashuk.pointmap.ui.screens.ProfileScreen
+import ru.vlyashuk.pointmap.ui.screens.UpdatePointScreen
 import ru.vlyashuk.pointmap.ui.theme.PointMapTheme
 
 @AndroidEntryPoint
@@ -84,6 +88,17 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Routes.AddPoint.route ?: "add_point") {
                             AddPointScreen(navController)
+                        }
+                        composable(
+                            route = Routes.UpdatePoint,
+                            arguments = listOf(navArgument("id") { type = NavType.LongType })
+                        ) { backStackEntry ->
+                            val pointId = backStackEntry.arguments?.getLong("id") ?: 0L
+                            UpdatePointScreen(
+                                navController = navController,
+                                pointViewModel = hiltViewModel(),
+                                pointId = pointId
+                            )
                         }
                     }
                 }

@@ -3,7 +3,7 @@ package ru.vlyashuk.pointmap.navigation
 import androidx.navigation.NavDestination
 import kotlinx.serialization.Serializable
 
-class Routes {
+object Routes {
 
     @Serializable
     object Main : NavDestination("main")
@@ -17,6 +17,7 @@ class Routes {
     @Serializable
     object AddPoint : NavDestination("add_point")
 
-    @Serializable
-    data class EditNote(val id: Long)
+    const val UpdatePoint = "update_point/{id}"
+
+    fun updatePointRoute(id: Long) = "update_point/$id"
 }
