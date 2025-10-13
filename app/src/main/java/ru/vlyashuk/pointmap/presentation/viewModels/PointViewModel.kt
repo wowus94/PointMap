@@ -7,21 +7,29 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import ru.vlyashuk.pointmap.data.local.PointEntity
-import ru.vlyashuk.pointmap.data.repository.PointRepository
+import ru.vlyashuk.pointmap.domain.model.Point
+import ru.vlyashuk.pointmap.domain.usecase.AddPointUseCase
+import ru.vlyashuk.pointmap.domain.usecase.DeletePointUseCase
+import ru.vlyashuk.pointmap.domain.usecase.GetPointsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class PointViewModel @Inject constructor(
-    private val pointRepository: PointRepository
+    private val getPointsUseCase: GetPointsUseCase,
+    private val addPointUseCase: AddPointUseCase,
+    private val deletePointUseCase: DeletePointUseCase
 ) : ViewModel() {
 
-    private val _points = MutableStateFlow<List<PointEntity>>(emptyList())
-    val points: StateFlow<List<PointEntity>> = _points
+    private val _points = MutableStateFlow<List<Point>>(emptyList())
+    val points: StateFlow<List<Point>> = _points
+
+    init {
+        loadPoints()
+    }
 
     fun loadPoints() {
         viewModelScope.launch {
-            pointRepository.getAllPoints()
+            getPointsUseCase()
                 .catch { e -> e.printStackTrace() }
                 .collect { list -> _points.value = list }
         }
@@ -29,17 +37,14 @@ class PointViewModel @Inject constructor(
 
     fun addPoint(title: String, coordinates: String, description: String?) {
         viewModelScope.launch {
-            val point = PointEntity(
-                title = title,
-                coordinates = coordinates,
-                description = description
-            )
-            pointRepository.insert(point)
+            val point = Point(title = title, coordinates = coordinates, description = description)
+            addPointUseCase(point)
         }
     }
 
-    fun deletePoint(point: PointEntity) {
-        viewModelScope.launch { pointRepository.delete(point) }
+    fun deletePoint(point: Point) {
+        viewModelScope.launch {
+            deletePointUseCase(point)
+        }
     }
-
 }
