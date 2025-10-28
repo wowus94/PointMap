@@ -3,3 +3,5 @@ PoinMap – приложение для сохранения пользоват�
 - Kotlin
 - Jetpack Compose
 - Compose Navigation
+- Room
+- Hilt
