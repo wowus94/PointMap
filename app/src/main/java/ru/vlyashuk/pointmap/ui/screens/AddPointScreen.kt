@@ -3,6 +3,7 @@ package ru.vlyashuk.pointmap.ui.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,12 +36,13 @@ fun AddPointScreen(
     var title by remember { mutableStateOf("") }
     var coordinates by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+    var status by remember { mutableStateOf("") }
 
-    Scaffold { innerPadding ->
+    Scaffold { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(PaddingValues(top = paddingValues.calculateTopPadding()))
         ) {
             Column(
                 modifier = Modifier
@@ -67,11 +69,18 @@ fun AddPointScreen(
                     label = { Text("Description") },
                     modifier = Modifier.fillMaxWidth()
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = status,
+                    onValueChange = { status = it },
+                    label = { Text("Status") },
+                    modifier = Modifier.fillMaxWidth()
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = {
                         if (title.isNotBlank() && coordinates.isNotBlank()) {
-                            pointViewModel.addPoint(title, coordinates, description)
+                            pointViewModel.addPoint(title, coordinates, description, status)
                             navController.popBackStack()
                         }
                     },

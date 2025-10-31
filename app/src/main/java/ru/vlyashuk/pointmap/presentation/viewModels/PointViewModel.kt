@@ -42,9 +42,14 @@ class PointViewModel @Inject constructor(
         }
     }
 
-    fun addPoint(title: String, coordinates: String, description: String?) {
+    fun addPoint(title: String, coordinates: String, description: String?, status: String?) {
         viewModelScope.launch {
-            val point = Point(title = title, coordinates = coordinates, description = description)
+            val point = Point(
+                title = title,
+                coordinates = coordinates,
+                description = description,
+                status = status
+            )
             addPointUseCase(point)
         }
     }

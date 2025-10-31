@@ -1,10 +1,12 @@
 package ru.vlyashuk.pointmap.ui.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,17 +31,21 @@ fun MainScreen(
         pointViewModel.loadPoints()
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        LazyColumn {
-            items(points) { point ->
-                PointItemCard(
-                    point = point,
-                    modifier = Modifier.padding(8.dp),
-                    openUpdateScreen = { navController.navigate(Routes.updatePointRoute(point.id)) },
-                    onDeleteClick = { pointViewModel.deletePoint(point) }
-                )
+    Scaffold { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(PaddingValues(top = paddingValues.calculateTopPadding()))
+        ) {
+            LazyColumn {
+                items(points) { point ->
+                    PointItemCard(
+                        point = point,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                        openUpdateScreen = { navController.navigate(Routes.updatePointRoute(point.id)) },
+                        onDeleteClick = { pointViewModel.deletePoint(point) }
+                    )
+                }
             }
         }
     }

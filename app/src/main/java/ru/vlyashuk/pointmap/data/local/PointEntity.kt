@@ -9,5 +9,6 @@ data class PointEntity(
     val id: Long = 0L,
     val title: String,
     val coordinates: String,
-    val description: String? = null
+    val description: String? = null,
+    val status: String? = ""
 )

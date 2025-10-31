@@ -7,12 +7,14 @@ fun Point.toEntity() = PointEntity(
     id = id,
     title = title,
     coordinates = coordinates,
-    description = description
+    description = description,
+    status = status
 )
 
 fun PointEntity.toDomain() = Point(
     id = id,
     title = title,
     coordinates = coordinates,
-    description = description
+    description = description,
+    status = status
 )
