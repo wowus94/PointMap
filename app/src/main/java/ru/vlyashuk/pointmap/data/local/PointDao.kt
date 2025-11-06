@@ -28,4 +28,7 @@ interface PointDao {
 
     @Query("DELETE FROM points")
     suspend fun deleteAll()
+
+    @Query("SELECT * FROM points WHERE status IN (:statuses) ORDER BY id DESC")
+    fun getPointsByStatuses(statuses: List<String>): Flow<List<PointEntity>>
 }

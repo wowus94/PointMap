@@ -11,6 +11,7 @@ import ru.vlyashuk.pointmap.domain.model.Point
 import ru.vlyashuk.pointmap.domain.usecase.AddPointUseCase
 import ru.vlyashuk.pointmap.domain.usecase.DeletePointUseCase
 import ru.vlyashuk.pointmap.domain.usecase.GetPointByIdUseCase
+import ru.vlyashuk.pointmap.domain.usecase.GetPointsByStatusesUseCase
 import ru.vlyashuk.pointmap.domain.usecase.GetPointsUseCase
 import ru.vlyashuk.pointmap.domain.usecase.UpdatePointUseCase
 import javax.inject.Inject
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class PointViewModel @Inject constructor(
     private val getPointsUseCase: GetPointsUseCase,
     private val addPointUseCase: AddPointUseCase,
+    private val getPointsByStatusUseCase: GetPointsByStatusesUseCase,
     private val deletePointUseCase: DeletePointUseCase,
     private val updatePointUseCase: UpdatePointUseCase,
     private val getPointByIdUseCase: GetPointByIdUseCase
@@ -30,6 +32,12 @@ class PointViewModel @Inject constructor(
     private val _selectedPoint = MutableStateFlow<Point?>(null)
     val selectedPoint: StateFlow<Point?> = _selectedPoint
 
+    private val _availableStatuses = MutableStateFlow<List<String>>(emptyList())
+    val availableStatuses: StateFlow<List<String>> = _availableStatuses
+
+    private val _selectedStatuses = MutableStateFlow<Set<String>>(emptySet())
+    val selectedStatuses: StateFlow<Set<String>> = _selectedStatuses
+
     init {
         loadPoints()
     }
@@ -38,7 +46,12 @@ class PointViewModel @Inject constructor(
         viewModelScope.launch {
             getPointsUseCase()
                 .catch { e -> e.printStackTrace() }
-                .collect { list -> _points.value = list }
+                .collect { list ->
+                    _points.value = list
+                    _availableStatuses.value =
+                        list.mapNotNull { it.status?.takeIf { it.isNotEmpty() } }
+                            .distinct()
+                }
         }
     }
 
@@ -59,6 +72,31 @@ class PointViewModel @Inject constructor(
             val point = getPointByIdUseCase(id)
             _selectedPoint.value = point
         }
+    }
+
+    fun toggleStatus(status: String) {
+        val current = _selectedStatuses.value.toMutableSet()
+        if (current.contains(status)) current.remove(status)
+        else current.add(status)
+        _selectedStatuses.value = current
+    }
+
+    fun applyFilter() {
+        viewModelScope.launch {
+            val selected = _selectedStatuses.value
+            if (selected.isEmpty()) {
+                loadPoints()
+            } else {
+                getPointsByStatusUseCase(selected.toList())
+                    .catch { e -> e.printStackTrace() }
+                    .collect { list -> _points.value = list }
+            }
+        }
+    }
+
+    fun resetFilter() {
+        _selectedStatuses.value = emptySet()
+        loadPoints()
     }
 
     fun updatePoint(point: Point) {
