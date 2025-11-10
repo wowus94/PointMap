@@ -12,7 +12,8 @@ class PointRepositoryImpl @Inject constructor(
     override fun getAllPoints(): Flow<List<PointEntity>> = dao.getAllPoints()
     override fun getPointsByStatuses(statuses: List<String>): Flow<List<PointEntity>> =
         dao.getPointsByStatuses(statuses)
-
+    override fun searchPoints(query: String): Flow<List<PointEntity>> =
+        dao.searchPoints(query)
     override suspend fun getPointById(id: Long): PointEntity? = dao.getPointById(id)
     override suspend fun insert(point: PointEntity) = dao.insert(point)
     override suspend fun update(point: PointEntity) = dao.update(point)

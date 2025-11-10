@@ -13,6 +13,7 @@ import ru.vlyashuk.pointmap.domain.usecase.DeletePointUseCase
 import ru.vlyashuk.pointmap.domain.usecase.GetPointByIdUseCase
 import ru.vlyashuk.pointmap.domain.usecase.GetPointsByStatusesUseCase
 import ru.vlyashuk.pointmap.domain.usecase.GetPointsUseCase
+import ru.vlyashuk.pointmap.domain.usecase.SearchPointsUseCase
 import ru.vlyashuk.pointmap.domain.usecase.UpdatePointUseCase
 import javax.inject.Inject
 
@@ -23,7 +24,8 @@ class PointViewModel @Inject constructor(
     private val getPointsByStatusUseCase: GetPointsByStatusesUseCase,
     private val deletePointUseCase: DeletePointUseCase,
     private val updatePointUseCase: UpdatePointUseCase,
-    private val getPointByIdUseCase: GetPointByIdUseCase
+    private val getPointByIdUseCase: GetPointByIdUseCase,
+    private val searchPointsUseCase: SearchPointsUseCase
 ) : ViewModel() {
 
     private val _points = MutableStateFlow<List<Point>>(emptyList())
@@ -37,6 +39,9 @@ class PointViewModel @Inject constructor(
 
     private val _selectedStatuses = MutableStateFlow<Set<String>>(emptySet())
     val selectedStatuses: StateFlow<Set<String>> = _selectedStatuses
+
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery
 
     init {
         loadPoints()
@@ -108,6 +113,15 @@ class PointViewModel @Inject constructor(
     fun deletePoint(point: Point) {
         viewModelScope.launch {
             deletePointUseCase(point)
+        }
+    }
+
+    fun searchPoints(query: String) {
+        _searchQuery.value = query
+        viewModelScope.launch {
+            searchPointsUseCase(query)
+                .catch { it.printStackTrace() }
+                .collect { list -> _points.value = list }
         }
     }
 }

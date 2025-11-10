@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.google.services)
+    //alias(libs.plugins.google.services)
     alias(libs.plugins.room)
 }
 
@@ -17,7 +17,7 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0.9"
+        versionName = "1.0.10"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,8 +50,8 @@ room {
 dependencies {
 
     // --- Firebase ---
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
+    /*implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)*/
 
     // --- Hilt / DI ---
     implementation(libs.hilt.android)

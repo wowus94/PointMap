@@ -31,4 +31,13 @@ interface PointDao {
 
     @Query("SELECT * FROM points WHERE status IN (:statuses) ORDER BY id DESC")
     fun getPointsByStatuses(statuses: List<String>): Flow<List<PointEntity>>
+
+    @Query("""
+        SELECT * FROM points
+        WHERE title LIKE '%' || :query || '%'
+           OR description LIKE '%' || :query || '%'
+           OR status LIKE '%' || :query || '%'
+        ORDER BY id DESC
+    """)
+    fun searchPoints(query: String): Flow<List<PointEntity>>
 }

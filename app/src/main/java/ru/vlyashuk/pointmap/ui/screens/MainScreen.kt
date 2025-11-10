@@ -1,7 +1,10 @@
 package ru.vlyashuk.pointmap.ui.screens
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,14 +18,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -53,10 +61,21 @@ fun MainScreen(
     pointViewModel: PointViewModel = hiltViewModel()
 ) {
     val points by pointViewModel.points.collectAsState()
+    val query by pointViewModel.searchQuery.collectAsState()
 
     val filterSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showFilterBottomSheet by remember { mutableStateOf(false) }
+
+    var searchExpanded by remember { mutableStateOf(false) }
+
+    val backgroundColor by animateColorAsState(
+        targetValue = if (searchExpanded)
+            MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.98f)
+        else
+            MaterialTheme.colorScheme.background,
+        label = "search background animation"
+    )
 
     LaunchedEffect(Unit) {
         pointViewModel.loadPoints()
@@ -66,32 +85,127 @@ fun MainScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(backgroundColor)
                 .padding(PaddingValues(top = paddingValues.calculateTopPadding()))
         ) {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Filter",
-                    modifier = Modifier
-                        .padding(vertical = 8.dp, horizontal = 16.dp)
-                        .clickable {
-                            showFilterBottomSheet = true
+            SearchBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                expanded = searchExpanded,
+                onExpandedChange = { searchExpanded = it },
+                inputField = {
+                    SearchBarDefaults.InputField(
+                        query = query,
+                        onQueryChange = { pointViewModel.searchPoints(it) },
+                        onSearch = { searchExpanded = false },
+                        expanded = searchExpanded,
+                        onExpandedChange = { searchExpanded = it },
+                        placeholder = { Text("Search...") },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search"
+                            )
+                        },
+                        trailingIcon = {
+                            Row {
+                                if (query.isNotEmpty()) {
+                                    IconButton(onClick = { pointViewModel.searchPoints("") }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = "Очистить"
+                                        )
+                                    }
+                                }
+                                IconButton(onClick = { showFilterBottomSheet = true }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Settings,
+                                        contentDescription = "Фильтр"
+                                    )
+                                }
+                            }
                         }
-                )
+                    )
+                }
+            ) {
+                if (searchExpanded) {
+                    if (points.isEmpty() && query.isNotEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(32.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Not found «$query»",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Gray
+                            )
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f, fill = true),
+                            contentPadding = PaddingValues(
+                                bottom = paddingValues.calculateBottomPadding() + 80.dp,
+                            )
+                        ) {
+                            items(points) { point ->
+                                PointItemCard(
+                                    point = point,
+                                    modifier = Modifier
+                                        .padding(vertical = 4.dp)
+                                        .clickable {
+                                            searchExpanded = false
+                                            navController.navigate(Routes.updatePointRoute(point.id))
+                                        },
+                                    openUpdateScreen = {
+                                        navController.navigate(Routes.updatePointRoute(point.id))
+                                    },
+                                    onDeleteClick = { pointViewModel.deletePoint(point) }
+                                )
+                            }
+                        }
+                    }
+                }
             }
 
-            LazyColumn {
-                items(points) { point ->
-                    PointItemCard(
-                        point = point,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                        openUpdateScreen = { navController.navigate(Routes.updatePointRoute(point.id)) },
-                        onDeleteClick = { pointViewModel.deletePoint(point) }
-                    )
+            if (!searchExpanded) {
+                if (points.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "No points added yet",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.Gray
+                        )
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f, fill = true),
+                        contentPadding = PaddingValues(
+                            bottom = paddingValues.calculateBottomPadding() + 80.dp
+                        )
+                    ) {
+                        items(points) { point ->
+                            PointItemCard(
+                                point = point,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                                openUpdateScreen = {
+                                    navController.navigate(Routes.updatePointRoute(point.id))
+                                },
+                                onDeleteClick = { pointViewModel.deletePoint(point) }
+                            )
+                        }
+                    }
                 }
             }
         }

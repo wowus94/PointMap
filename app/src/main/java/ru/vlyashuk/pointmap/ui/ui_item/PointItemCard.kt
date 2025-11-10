@@ -62,6 +62,11 @@ fun PointItemCard(
                     text = point.description ?: "",
                     style = MaterialTheme.typography.bodyMedium
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = point.status ?: "",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
 
             IconButton(onClick = onDeleteClick) {
