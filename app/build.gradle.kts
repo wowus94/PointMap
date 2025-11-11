@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -8,6 +10,17 @@ plugins {
     alias(libs.plugins.room)
 }
 
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
+val mapkitApiKey: String = localProperties.getProperty("MAPKIT_API_KEY", "")
+
+extra["mapkitApiKey"] = mapkitApiKey
+
+
 android {
     namespace = "ru.vlyashuk.pointmap"
     compileSdk = 36
@@ -17,9 +30,11 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0.10"
+        versionName = "1.0.11"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "MAPKIT_API_KEY", "\"$mapkitApiKey\"")
     }
 
     buildTypes {
@@ -40,6 +55,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -48,6 +64,9 @@ room {
 }
 
 dependencies {
+
+    // --- Yandex ---
+    implementation(libs.maps.mobile)
 
     // --- Firebase ---
     /*implementation(platform(libs.firebase.bom))

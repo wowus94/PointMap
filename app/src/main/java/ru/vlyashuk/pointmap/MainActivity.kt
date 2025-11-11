@@ -29,8 +29,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.vlyashuk.pointmap.navigation.BottomNavScreen
 import ru.vlyashuk.pointmap.navigation.Routes
 import ru.vlyashuk.pointmap.ui.screens.AddPointScreen
-import ru.vlyashuk.pointmap.ui.screens.CatalogScreen
 import ru.vlyashuk.pointmap.ui.screens.MainScreen
+import ru.vlyashuk.pointmap.ui.screens.MapScreen
 import ru.vlyashuk.pointmap.ui.screens.ProfileScreen
 import ru.vlyashuk.pointmap.ui.screens.UpdatePointScreen
 import ru.vlyashuk.pointmap.ui.theme.PointMapTheme
@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
                             MainScreen(navController)
                         }
                         composable(BottomNavScreen.Map.route) {
-                            CatalogScreen(Modifier.padding(innerPadding))
+                            MapScreen(Modifier.padding(innerPadding))
                         }
                         composable(BottomNavScreen.Profile.route) {
                             ProfileScreen(Modifier.padding(innerPadding))
