@@ -86,7 +86,6 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(backgroundColor)
-                .padding(PaddingValues(top = paddingValues.calculateTopPadding()))
         ) {
             SearchBar(
                 modifier = Modifier

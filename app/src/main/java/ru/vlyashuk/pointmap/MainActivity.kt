@@ -27,7 +27,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import ru.vlyashuk.pointmap.navigation.BottomNavScreen
-import ru.vlyashuk.pointmap.navigation.Routes
+import ru.vlyashuk.pointmap.navigation.baseAddPoint
+import ru.vlyashuk.pointmap.navigation.pattern
+import ru.vlyashuk.pointmap.navigation.updatePoint
 import ru.vlyashuk.pointmap.ui.screens.AddPointScreen
 import ru.vlyashuk.pointmap.ui.screens.MainScreen
 import ru.vlyashuk.pointmap.ui.screens.MapScreen
@@ -60,9 +62,7 @@ class MainActivity : ComponentActivity() {
                         if (currentRoute == BottomNavScreen.Main.route) {
                             FloatingActionButton(
                                 onClick = {
-                                    navController.navigate(
-                                        Routes.AddPoint.route ?: "add_point"
-                                    )
+                                    navController.navigate(baseAddPoint)
                                 }
                             ) {
                                 Icon(
@@ -81,16 +81,36 @@ class MainActivity : ComponentActivity() {
                             MainScreen(navController)
                         }
                         composable(BottomNavScreen.Map.route) {
-                            MapScreen(Modifier.padding(innerPadding))
+                            MapScreen(navController, Modifier.padding(innerPadding))
                         }
                         composable(BottomNavScreen.Profile.route) {
                             ProfileScreen(Modifier.padding(innerPadding))
                         }
-                        composable(Routes.AddPoint.route ?: "add_point") {
-                            AddPointScreen(navController)
-                        }
                         composable(
-                            route = Routes.UpdatePoint,
+                            route = pattern,
+                            arguments = listOf(
+                                navArgument("lat") {
+                                    type = NavType.StringType
+                                    defaultValue = ""
+                                },
+                                navArgument("lon") {
+                                    type = NavType.StringType
+                                    defaultValue = ""
+                                }
+                            )
+                        ) { entry ->
+                            val lat = entry.arguments?.getString("lat")?.toDoubleOrNull()
+                            val lon = entry.arguments?.getString("lon")?.toDoubleOrNull()
+
+                            AddPointScreen(
+                                navController = navController,
+                                lat = lat,
+                                lon = lon
+                            )
+                        }
+
+                        composable(
+                            route = updatePoint,
                             arguments = listOf(navArgument("id") { type = NavType.LongType })
                         ) { backStackEntry ->
                             val pointId = backStackEntry.arguments?.getLong("id") ?: 0L

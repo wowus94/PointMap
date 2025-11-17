@@ -15,12 +15,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ru.vlyashuk.pointmap.domain.model.Point
 
@@ -46,26 +42,24 @@ fun PointItemCard(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(
-                    text = point.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                TextItemCard(
+                    title = "Title",
+                    value = point.title
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Координаты: ${point.coordinates}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                TextItemCard(
+                    title = "Coordinates",
+                    value = point.coordinates
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = point.description ?: "",
-                    style = MaterialTheme.typography.bodyMedium
+                TextItemCard(
+                    title = "Description",
+                    value = point.description ?: ""
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = point.status ?: "",
-                    style = MaterialTheme.typography.bodyMedium
+                TextItemCard(
+                    title = "Status",
+                    value = point.status ?: ""
                 )
             }
 

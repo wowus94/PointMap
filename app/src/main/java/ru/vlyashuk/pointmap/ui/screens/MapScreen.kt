@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -32,15 +35,18 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation.NavHostController
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
 import ru.vlyashuk.pointmap.R
+import ru.vlyashuk.pointmap.navigation.Routes
 
 @Composable
 fun MapScreen(
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     var clickedCoordinates by remember { mutableStateOf<Point?>(null) }
@@ -62,7 +68,7 @@ fun MapScreen(
             enter = fadeIn(),
             exit = fadeOut(),
             modifier = Modifier
-                .align(Alignment.TopCenter)
+                .align(Alignment.BottomCenter)
                 .padding(top = 32.dp)
         ) {
             clickedCoordinates?.let { point ->
@@ -77,7 +83,8 @@ fun MapScreen(
                 ) {
                     Column(
                         modifier = Modifier
-                            .padding(horizontal = 20.dp, vertical = 12.dp)
+                            .padding(horizontal = 20.dp, vertical = 12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = "Coordinates:",
@@ -96,6 +103,30 @@ fun MapScreen(
                             color = textColor,
                             fontSize = 14.sp
                         )
+                        Spacer(Modifier.height(4.dp))
+                        Button(
+                            onClick = {
+                                clickedCoordinates?.let {
+                                    navController.navigate(
+                                        Routes.AddPoint.withCoordinates(
+                                            point.latitude,
+                                            point.longitude
+                                        )
+                                    )
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            )
+                        ) {
+                            Text(
+                                text = "Save point",
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
                     }
                 }
             }

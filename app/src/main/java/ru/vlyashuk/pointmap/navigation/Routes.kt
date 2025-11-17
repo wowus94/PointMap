@@ -15,9 +15,15 @@ object Routes {
     object Profile : NavDestination("profile")
 
     @Serializable
-    object AddPoint : NavDestination("add_point")
+    object AddPoint : NavDestination("add_point") {
 
-    const val UpdatePoint = "update_point/{id}"
+        fun withCoordinates(lat: Double, lon: Double): String =
+            "$baseAddPoint?lat=$lat&lon=$lon"
+    }
 
-    fun updatePointRoute(id: Long) = "update_point/$id"
+    fun updatePointRoute(id: Long) = updatePoint.replace("{id}", id.toString())
 }
+
+const val updatePoint = "update_point/{id}"
+const val pattern = "add_point?lat={lat}&lon={lon}"
+const val baseAddPoint = "add_point"

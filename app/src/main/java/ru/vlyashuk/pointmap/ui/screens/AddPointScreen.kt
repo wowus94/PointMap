@@ -15,6 +15,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,8 @@ import ru.vlyashuk.pointmap.presentation.viewModels.PointViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddPointScreen(
+    lat: Double?,
+    lon: Double?,
     navController: NavHostController,
     pointViewModel: PointViewModel = hiltViewModel()
 ) {
@@ -37,6 +40,12 @@ fun AddPointScreen(
     var coordinates by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var status by remember { mutableStateOf("") }
+
+    LaunchedEffect(lat, lon) {
+        if (lat != null && lon != null) {
+            coordinates = "$lat, $lon"
+        }
+    }
 
     Scaffold { paddingValues ->
         Box(
