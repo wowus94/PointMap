@@ -12,7 +12,7 @@ object Routes {
     object Map : NavDestination("map")
 
     @Serializable
-    object Profile : NavDestination("profile")
+    object Profile : NavDestination("settings")
 
     @Serializable
     object AddPoint : NavDestination("add_point") {

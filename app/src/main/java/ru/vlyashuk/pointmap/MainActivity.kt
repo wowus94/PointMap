@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -15,6 +16,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -33,17 +37,31 @@ import ru.vlyashuk.pointmap.navigation.updatePoint
 import ru.vlyashuk.pointmap.ui.screens.AddPointScreen
 import ru.vlyashuk.pointmap.ui.screens.MainScreen
 import ru.vlyashuk.pointmap.ui.screens.MapScreen
-import ru.vlyashuk.pointmap.ui.screens.ProfileScreen
+import ru.vlyashuk.pointmap.ui.screens.SettingsScreen
 import ru.vlyashuk.pointmap.ui.screens.UpdatePointScreen
+import ru.vlyashuk.pointmap.ui.theme.AppThemeMode
 import ru.vlyashuk.pointmap.ui.theme.PointMapTheme
+import ru.vlyashuk.pointmap.data.repository.SettingsRepository
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val settingsRepository = SettingsRepository(this)
+
         setContent {
-            PointMapTheme {
+
+            var appTheme by remember { mutableStateOf(settingsRepository.loadTheme()) }
+
+            PointMapTheme(
+                darkTheme = when (appTheme) {
+                    AppThemeMode.SYSTEM -> isSystemInDarkTheme()
+                    AppThemeMode.DARK -> true
+                    AppThemeMode.LIGHT -> false
+                }
+            ) {
                 val navController = rememberNavController()
                 Scaffold(
                     bottomBar = {
@@ -84,7 +102,14 @@ class MainActivity : ComponentActivity() {
                             MapScreen(navController, Modifier.padding(innerPadding))
                         }
                         composable(BottomNavScreen.Profile.route) {
-                            ProfileScreen(Modifier.padding(innerPadding))
+                            SettingsScreen(
+                                appTheme = appTheme,
+                                onThemeChange = { newTheme ->
+                                    appTheme = newTheme
+                                    settingsRepository.saveTheme(newTheme)
+                                },
+                                Modifier.padding(innerPadding)
+                            )
                         }
                         composable(
                             route = pattern,
