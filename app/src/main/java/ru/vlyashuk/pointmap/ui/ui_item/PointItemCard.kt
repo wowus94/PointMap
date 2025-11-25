@@ -17,7 +17,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import ru.vlyashuk.pointmap.R
 import ru.vlyashuk.pointmap.domain.model.Point
 
 @Composable
@@ -43,28 +45,28 @@ fun PointItemCard(
                 modifier = Modifier.padding(16.dp)
             ) {
                 TextItemCard(
-                    title = "Title",
+                    title = stringResource(R.string.title),
                     value = point.title
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 TextItemCard(
-                    title = "Coordinates",
+                    title = stringResource(R.string.coordinates),
                     value = point.coordinates
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextItemCard(
-                    title = "Description",
+                    title = stringResource(R.string.description),
                     value = point.description ?: ""
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextItemCard(
-                    title = "Status",
+                    title = stringResource(R.string.status),
                     value = point.status ?: ""
                 )
             }
 
             IconButton(onClick = onDeleteClick) {
-                Icon(imageVector = Icons.Outlined.Delete, contentDescription = "Delete")
+                Icon(imageVector = Icons.Outlined.Delete, contentDescription = stringResource(R.string.delete))
             }
         }
     }

@@ -14,6 +14,6 @@ class SettingsRepository(context: Context) {
 
     fun loadTheme(): AppThemeMode {
         val value = prefs.getString("theme_mode", AppThemeMode.SYSTEM.name)
-        return AppThemeMode.valueOf(value!!)
+        return AppThemeMode.valueOf(value ?: AppThemeMode.SYSTEM.name)
     }
 }

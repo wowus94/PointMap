@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -87,19 +88,19 @@ fun MapScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Coordinates:",
+                            text = stringResource(R.string.coordinates),
                             fontWeight = FontWeight.Bold,
                             color = textColor,
                             fontSize = 16.sp
                         )
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            text = "Latitude: %.6f".format(point.latitude),
+                            text = stringResource(R.string.latitude_6f).format(point.latitude),
                             color = textColor,
                             fontSize = 14.sp
                         )
                         Text(
-                            text = "Longitude: %.6f".format(point.longitude),
+                            text = stringResource(R.string.longitude_6f).format(point.longitude),
                             color = textColor,
                             fontSize = 14.sp
                         )
@@ -123,7 +124,7 @@ fun MapScreen(
                             )
                         ) {
                             Text(
-                                text = "Save point",
+                                text = stringResource(R.string.save),
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
                         }

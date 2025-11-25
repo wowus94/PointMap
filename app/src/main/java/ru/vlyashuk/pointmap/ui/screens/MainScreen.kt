@@ -45,11 +45,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import ru.vlyashuk.pointmap.R
 import ru.vlyashuk.pointmap.navigation.Routes
 import ru.vlyashuk.pointmap.presentation.viewModels.PointViewModel
 import ru.vlyashuk.pointmap.ui.ui_item.PointItemCard
@@ -100,11 +102,11 @@ fun MainScreen(
                         onSearch = { searchExpanded = false },
                         expanded = searchExpanded,
                         onExpandedChange = { searchExpanded = it },
-                        placeholder = { Text("Search...") },
+                        placeholder = { Text(stringResource(R.string.search)) },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Search,
-                                contentDescription = "Search"
+                                contentDescription = stringResource(R.string.search_desc)
                             )
                         },
                         trailingIcon = {
@@ -113,14 +115,14 @@ fun MainScreen(
                                     IconButton(onClick = { pointViewModel.searchPoints("") }) {
                                         Icon(
                                             imageVector = Icons.Default.Close,
-                                            contentDescription = "Очистить"
+                                            contentDescription = stringResource(R.string.clear)
                                         )
                                     }
                                 }
                                 IconButton(onClick = { showFilterBottomSheet = true }) {
                                     Icon(
                                         imageVector = Icons.Default.Settings,
-                                        contentDescription = "Фильтр"
+                                        contentDescription = stringResource(R.string.filter)
                                     )
                                 }
                             }
@@ -137,7 +139,7 @@ fun MainScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Not found «$query»",
+                                text = stringResource(R.string.not_found, query),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = Color.Gray
                             )
@@ -180,7 +182,7 @@ fun MainScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No points added yet",
+                            text = stringResource(R.string.no_points_added_yet),
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color.Gray
                         )
@@ -248,7 +250,7 @@ fun FilterBottomSheet(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Filter points by status",
+                text = stringResource(R.string.filter_points_by_status),
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(Modifier.height(16.dp))
@@ -289,7 +291,7 @@ fun FilterBottomSheet(
                         scope.launch { filterSheetState.hide() }.invokeOnCompletion { onDismiss() }
                     }
                 ) {
-                    Text("Clear filter")
+                    Text(stringResource(R.string.clear_filter))
                 }
 
                 Button(
@@ -298,7 +300,7 @@ fun FilterBottomSheet(
                         scope.launch { filterSheetState.hide() }.invokeOnCompletion { onDismiss() }
                     }
                 ) {
-                    Text("Apply filter")
+                    Text(stringResource(R.string.apply_filter))
                 }
             }
         }

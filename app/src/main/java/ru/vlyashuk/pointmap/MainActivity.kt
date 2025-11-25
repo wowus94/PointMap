@@ -159,8 +159,13 @@ fun BottomNavBar(navController: NavHostController) {
         val currentRoute = currentRoute(navController)
         items.forEach { screen ->
             NavigationBarItem(
-                icon = { Icon(screen.icon, contentDescription = screen.title) },
-                label = { Text(screen.title) },
+                icon = {
+                    Icon(
+                        imageVector = screen.icon,
+                        contentDescription = stringResource(id = screen.title)
+                    )
+                },
+                label = { Text(stringResource(id = screen.title)) },
                 selected = currentRoute == screen.route,
                 onClick = {
                     if (currentRoute != screen.route) {

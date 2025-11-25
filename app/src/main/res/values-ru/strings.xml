@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Точка карты</string>
+    <string name="add_point">Добавить точку</string>
+    <string name="app_theme">Тема приложения</string>
+    <string name="app_settings">Настройки приложения</string>
+    <string name="light">Светлая</string>
+    <string name="dark">Темная</string>
+    <string name="system">Системная</string>
+    <string name="title">Заголовок</string>
+    <string name="coordinates">Координаты</string>
+    <string name="description">Описание</string>
+    <string name="status">Статус</string>
+    <string name="save">Сохранить</string>
+    <string name="search">Поиск…</string>
+    <string name="search_desc">Поиск</string>
+    <string name="clear">Очистить</string>
+    <string name="filter">Фильтр</string>
+    <string name="not_found">Не найдено «%1$s»</string>
+    <string name="no_points_added_yet">Нет добавленных точек</string>
+    <string name="filter_points_by_status">Фильтр точек по статусу</string>
+    <string name="clear_filter">Очистить фильтр</string>
+    <string name="apply_filter">Применить фильтр</string>
+    <string name="delete">Удалить</string>
+    <string name="list">Список</string>
+    <string name="map">Карта</string>
+    <string name="settings">Настройки</string>
+    <string name="latitude_6f">Широта: %.6f</string>
+    <string name="longitude_6f">Долгота: %.6f</string>
+</resources>

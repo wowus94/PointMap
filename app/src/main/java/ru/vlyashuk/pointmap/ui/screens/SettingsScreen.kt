@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,7 +37,7 @@ fun SettingsScreen(
         ) {
 
             Text(
-                "App settings",
+                stringResource(R.string.app_settings),
                 modifier = Modifier
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -49,7 +50,7 @@ fun SettingsScreen(
                     .padding(horizontal = 8.dp, vertical = 8.dp)
             )
             Text(
-                "App theme",
+                stringResource(R.string.app_theme),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp, horizontal = 16.dp),
@@ -66,7 +67,7 @@ fun SettingsScreen(
                     selected = appTheme == AppThemeMode.LIGHT,
                     onClick = { onThemeChange(AppThemeMode.LIGHT) },
                     shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3),
-                    label = { Text("Light") },
+                    label = { Text(stringResource(R.string.light)) },
                     icon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_light_mode),
@@ -79,7 +80,7 @@ fun SettingsScreen(
                     selected = appTheme == AppThemeMode.DARK,
                     onClick = { onThemeChange(AppThemeMode.DARK) },
                     shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3),
-                    label = { Text("Dark") },
+                    label = { Text(stringResource(R.string.dark)) },
                     icon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_dark_mode),
@@ -92,7 +93,7 @@ fun SettingsScreen(
                     selected = appTheme == AppThemeMode.SYSTEM,
                     onClick = { onThemeChange(AppThemeMode.SYSTEM) },
                     shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3),
-                    label = { Text("System") },
+                    label = { Text(stringResource(R.string.system)) },
                     icon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_system_mode),

@@ -21,10 +21,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import ru.vlyashuk.pointmap.R
 import ru.vlyashuk.pointmap.presentation.viewModels.PointViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -60,14 +62,14 @@ fun AddPointScreen(
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("Title") },
+                    label = { Text(stringResource(R.string.title)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = coordinates,
                     onValueChange = { coordinates = it },
-                    label = { Text("Coordinates") },
+                    label = { Text(stringResource(R.string.coordinates)) },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
@@ -75,14 +77,14 @@ fun AddPointScreen(
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("Description") },
+                    label = { Text(stringResource(R.string.description)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = status,
                     onValueChange = { status = it },
-                    label = { Text("Status") },
+                    label = { Text(stringResource(R.string.status)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -95,7 +97,7 @@ fun AddPointScreen(
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Save")
+                    Text(stringResource(R.string.save))
                 }
             }
         }
