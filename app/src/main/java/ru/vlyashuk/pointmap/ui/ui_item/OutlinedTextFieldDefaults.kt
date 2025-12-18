@@ -18,13 +18,17 @@ fun OutlinedTextFieldDefaults(
         keyboardType = KeyboardType.Text,
         capitalization = KeyboardCapitalization.Sentences,
         imeAction = ImeAction.Done
-    )
+    ),
+    isError: Boolean = false,
+    supportingText: @Composable (() -> Unit)? = null
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = label,
         modifier = modifier,
-        keyboardOptions = keyboardOptions
+        keyboardOptions = keyboardOptions,
+        isError = isError,
+        supportingText = supportingText
     )
 }

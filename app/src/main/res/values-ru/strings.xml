@@ -26,4 +26,11 @@
     <string name="settings">Настройки</string>
     <string name="latitude_6f">Широта: %.6f</string>
     <string name="longitude_6f">Долгота: %.6f</string>
+    <string name="name_required">Название обязательно</string>
+    <string name="coordinates_required">Координаты обязательны</string>
+    <string name="enter_coordinates_in_format_lat_lon">Введите координаты в формате:  широта, долгота</string>
+    <string name="invalid_latitude">Некорректная широта</string>
+    <string name="invalid_longitude">Некорректная долгота</string>
+    <string name="width_should_be_in_the_range_of_90_90">Широта должна быть в диапазоне -90..90</string>
+    <string name="longitude_should_be_in_the_range_of_180_180">Долгота должна быть в диапазоне -180..180</string>
 </resources>
